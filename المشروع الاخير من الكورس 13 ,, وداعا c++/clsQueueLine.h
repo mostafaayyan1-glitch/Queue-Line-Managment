@@ -5,12 +5,23 @@
 #include <queue>
 #include <stack>
 using namespace std;
+/**
+ * Class: clsQueueLine
+ * ------------------
+ * Manages the entire queue system: issuing tickets, serving clients,
+ * and displaying queue statistics.
+ */
 class clsQueueLine
 {
 private:
     string _prifix;
     int _Total_Tickets = 0;
     int _Average_Serve_Time = 0;
+    /**
+     * Inner Class: clsTicket
+     * ----------------------
+     * Represents an individual ticket with its specific data.
+     */
     class clsTicket
     {
     private:
@@ -21,6 +32,7 @@ private:
         string _Prifix;
 
     public:
+        // Constructor: Initializes ticket data at the moment of issuance
         clsTicket(int average, int waiting, int number, string prifix)
         {
             _Time_of_Ticket = clsDate::GetSystemDateTimeString();
@@ -31,11 +43,14 @@ private:
         }
         string TimeOfTickets() const { return _Time_of_Ticket; }
         int AverageServeTime() const { return _Average_Serve_Time; }
+        // Calculates estimated wait time based on the number of people in line
         int ExpectedForServe() const { return _Average_Serve_Time * _Waiting_Clients; }
         int NumberOfTicket() const { return _Number_of_Ticket; }
         int NumberOfWaitingClients() const { return _Waiting_Clients; }
         string Prifix() const { return _Prifix; }
+        // Returns the ticket unique identifier (e.g., A1, A2)
         string FullName() const { return _Prifix + to_string(_Number_of_Ticket); }
+        // Prints ticket details in a formatted UI
         void Print() const
         {
             cout << "\n----------------------------------------\n";
@@ -50,36 +65,42 @@ private:
     };
 public:
     queue<clsTicket> QueueLine;
+    // Initializes the system with a prefix and average service time per client
     clsQueueLine(string Prif, int Average)
         : _prifix(Prif), _Average_Serve_Time(Average), _Total_Tickets(0) {
     }
     string Prif() const { return _prifix; }
     int TotalTickets() const { return _Total_Tickets; }
     int AverageServeTime() const { return _Average_Serve_Time; }
+    // Generates a new ticket and pushes it to the queue
     void IssueTicket()
     {
         _Total_Tickets++;
         clsTicket Ticket(_Average_Serve_Time, (int)QueueLine.size(), _Total_Tickets, _prifix);
         QueueLine.push(Ticket);
     }
+    // Removes the next client from the queue
     bool ServedClient()
     {
         if (QueueLine.empty()) return false;
         QueueLine.pop();
         return true;
     }
+    // Returns the ID of the next client in line
     string WhoIsNext() const
     {
         return QueueLine.empty() ? "Not Found Any Client Yet :( " : QueueLine.front().FullName();
     }
+    // Returns the total number of clients served so far
     int NumberOfServedClients() const
     {
         return _Total_Tickets - (int)QueueLine.size();
     }
+    // Displays current queue statistics
     void Print() const
     {
         cout << "\n----------------------------------\n";
-        cout << "           Queue Info             \n";
+        cout << "             Queue Info           \n";
         cout << "----------------------------------\n";
         cout << "Prifix         : " << Prif() << endl;
         cout << "Total Tickets  : " << TotalTickets() << endl;
@@ -87,6 +108,7 @@ public:
         cout << "Served Clients : " << NumberOfServedClients() << endl;
         cout << "----------------------------------\n";
     }
+    // Prints queue from the front to the end (Left-to-Right)
     void PrintFromLTR()
     {
         queue<clsTicket> Temp = QueueLine;
@@ -97,6 +119,7 @@ public:
         }
         cout << endl;
     }
+    // Prints queue from end to front (Right-to-Left) using a Stack
     void PrintFromRTL()
     {
         queue<clsTicket> TempQueue = QueueLine;
@@ -112,6 +135,7 @@ public:
         }
         cout << endl;
     }
+    // Prints detailed info for every ticket currently in the queue
     void PrintAllTickets()
     {
         queue<clsTicket> TempQueue = QueueLine;
