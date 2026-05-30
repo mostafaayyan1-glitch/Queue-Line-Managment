@@ -1,7 +1,7 @@
 # 🎫 Queue Line Management System
 
 [![Status](https://img.shields.io/badge/Status-Completed-brightgreen)]()
-[![Language](https://img.shields.io/badge/Language-C++-blue)]()
+[![Language](https://img.sharp-badges.com/badge/Language-C++-blue)]()
 
 A robust C++ console application designed to manage client queues efficiently. This project leverages Object-Oriented Programming (OOP) principles and Data Structures to simulate a professional ticketing and service system.
 
